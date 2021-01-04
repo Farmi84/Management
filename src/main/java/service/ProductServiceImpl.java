@@ -10,7 +10,7 @@ public class ProductServiceImpl implements ProductService {
     List<Product> products;
 
     public ProductServiceImpl(){
-
+        products = new ArrayList<Product>();
     }
 
     public ProductServiceImpl(List<Product> products){
@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
     public boolean isInStock(String productName) {
         Product product = findProduct(productName);
-        if(product.getProductCount() > 0){
+        if(product != null && product.getProductCount() > 0){
             return true;
         } else {
             return false;
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
-    public boolean isExistById(int id) {
+    public boolean isExistById(long id) {
         for(int i = 0; i < products.size(); i++){
             Product product = products.get(i);
             if(product.getId() == id){

@@ -2,6 +2,8 @@ package dao;
 
 import api.ProductDao;
 import entity.Product;
+import entity.parser.ProductParser;
+import utils.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,30 +11,28 @@ import java.util.List;
 
 public class ProductDaoImpl implements ProductDao {
     String fileName;
+    String productType;
 
-    public ProductDaoImpl(String fileName) {
+    public ProductDaoImpl(String fileName, String productType) throws IOException {
         this.fileName = fileName;
+        this.productType = productType;
+        FileUtils.createNewFile(fileName);
     }
 
     public void saveProduct(Product product) throws IOException {
 
         List<Product> allProducts = getAllProducts();
         allProducts.add(product);
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allProducts.size(); i++){
-            fileWriter.write(allProducts.get(i).toString() + "\n");
-        }
-        fileWriter.close();
+        saveProducts(allProducts);
     }
 
     public void saveProducts(List<Product> products) throws IOException {
-        List<Product> allProducts = getAllProducts();
-        allProducts.addAll(products);
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allProducts.size(); i++){
-            fileWriter.write(allProducts.get(i).toString() + "\n");
+        FileUtils.clearFile(fileName);
+        PrintWriter printWriter = new PrintWriter(new FileOutputStream(fileName, true));
+        for (Product product : products) {
+            printWriter.write(product.toString() + "\n");
         }
-        fileWriter.close();
+        printWriter.close();
     }
 
     public void removeProductById(long productId) throws IOException {
@@ -41,14 +41,10 @@ public class ProductDaoImpl implements ProductDao {
             Product product = allProducts.get(i);
             if(product.getId() == productId){
                 allProducts.remove(i);
-                return;
+                break;
             }
         }
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allProducts.size(); i++){
-            fileWriter.write(allProducts.get(i).toString() + "\n");
-        }
-        fileWriter.close();
+        saveProducts(allProducts);
     }
 
     public void removeProductByName(String productName) throws IOException {
@@ -60,11 +56,7 @@ public class ProductDaoImpl implements ProductDao {
                 return;
             }
         }
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allProducts.size(); i++){
-            fileWriter.write(allProducts.get(i).toString() + "\n");
-        }
-        fileWriter.close();
+        saveProducts(allProducts);
     }
 
     public List<Product> getAllProducts() throws IOException {
@@ -72,24 +64,14 @@ public class ProductDaoImpl implements ProductDao {
         FileReader fileReader = new FileReader(fileName);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String readLine = bufferedReader.readLine();
-        if (readLine != null) {
-            while(readLine != null) {
-                String[] values = readLine.split("#");
-                int id = Integer.parseInt(values[0]);
-                String productName = values[1];
-                float price = Integer.parseInt(values[2]);
-                float weight = Integer.parseInt(values[3]);
-                String color = values[4];
-                int productCount = Integer.parseInt(values[5]);
-                Product product = new Product(id, productName, price, weight, color, productCount);
-                products.add(product);
-                String readline = bufferedReader.readLine();
-            }
-            bufferedReader.close();
-            return products;
-        } else {
-            return null;
+        while(readLine != null) {
+            Product product = ProductParser.stringToProduct(readLine, productType);
+            products.add(product);
+            String readline = bufferedReader.readLine();
         }
+        bufferedReader.close();
+        return products;
+
     }
 
     public Product getProductById(long productId) throws IOException {

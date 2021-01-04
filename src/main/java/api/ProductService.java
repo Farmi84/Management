@@ -10,6 +10,6 @@ public interface ProductService {
     Product findProduct(String productName);
     boolean isInStock (String productName);
     boolean isExistByName(String productName);
-    boolean isExistById(int id);
+    boolean isExistById(long id);
 
 }
