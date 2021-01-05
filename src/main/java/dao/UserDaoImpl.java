@@ -2,6 +2,8 @@ package dao;
 
 import api.UserDao;
 import entity.User;
+import entity.parser.UserParser;
+import utils.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,23 +19,17 @@ public class UserDaoImpl implements UserDao {
     public void saveUser(User user) throws IOException {
         List<User> allUsers = getAllUsers();
         allUsers.add(user);
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allUsers.size(); i++){
-            User userToSave = allUsers.get(i);
-            fileWriter.write(userToSave.toString() + "\n");
-        }
-        fileWriter.close();
+        saveUsers(allUsers);
     }
 
     public void saveUsers(List<User> users) throws IOException {
-        List<User> allUsers = getAllUsers();
-        allUsers.addAll(users);
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allUsers.size(); i++){
-            User userToSave = allUsers.get(i);
-            fileWriter.write(userToSave.toString() + "\n");
+        FileUtils.clearFile(fileName);
+        PrintWriter printWriter = new PrintWriter(new FileOutputStream(fileName, true));
+        for(int i = 0; i < users.size(); i++){
+            User userToSave = users.get(i);
+            printWriter.write(userToSave.toString() + "\n");
         }
-        fileWriter.close();
+        printWriter.close();
     }
 
     public List<User> getAllUsers() throws IOException {
@@ -42,11 +38,7 @@ public class UserDaoImpl implements UserDao {
         String readLine = bufferedReader.readLine();
         while (readLine != null){
             String [] userData = readLine.split("#");
-            long id = Integer.parseInt(userData[0]);
-            String login = userData[1];
-            String password = userData[2];
-            User user = new User(id, login, password);
-            users.add(user);
+            users.add(UserParser.stringToUser(userData));
             readLine = bufferedReader.readLine();
         }
         bufferedReader.close();
@@ -84,12 +76,7 @@ public class UserDaoImpl implements UserDao {
                 break;
             }
         }
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allUsers.size(); i++){
-            User userToSave = allUsers.get(i);
-            fileWriter.write(userToSave.toString() + "\n");
-        }
-        fileWriter.close();
+        saveUsers(allUsers);
     }
 
     public void removeUserById(long id) throws IOException {
@@ -101,11 +88,6 @@ public class UserDaoImpl implements UserDao {
                 break;
             }
         }
-        FileWriter fileWriter = new FileWriter(fileName);
-        for(int i = 0; i < allUsers.size(); i++){
-            User userToSave = allUsers.get(i);
-            fileWriter.write(userToSave.toString() + "\n");
-        }
-        fileWriter.close();
+        saveUsers(allUsers);
     }
 }
