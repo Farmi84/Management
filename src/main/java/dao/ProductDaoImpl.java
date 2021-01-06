@@ -26,13 +26,20 @@ public class ProductDaoImpl implements ProductDao {
         saveProducts(allProducts);
     }
 
-    public void saveProducts(List<Product> products) throws IOException {
-        FileUtils.clearFile(fileName);
-        PrintWriter printWriter = new PrintWriter(new FileOutputStream(fileName, true));
-        for (Product product : products) {
-            printWriter.write(product.toString() + "\n");
+    public void saveProducts(List<Product> products)  {
+        PrintWriter printWriter = null;
+        try {
+            FileUtils.clearFile(fileName);
+            printWriter = new PrintWriter(new FileOutputStream(fileName, true));
+            for (Product product : products) {
+                printWriter.write(product.toString() + "\n");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            printWriter.close();
         }
-        printWriter.close();
+
     }
 
     public void removeProductById(long productId) throws IOException {

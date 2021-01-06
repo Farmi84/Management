@@ -10,10 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
-    String fileName;
+    String fileName = "users.txt";
+    private static UserDaoImpl instance = null;
+    private UserDaoImpl() {
+    }
 
-    public UserDaoImpl(String fileName) {
-        this.fileName = fileName;
+    public static UserDaoImpl getInstance(){
+        if(instance == null){
+            instance = new UserDaoImpl();
+        }
+        return instance;
     }
 
     public void saveUser(User user) throws IOException {
@@ -32,16 +38,20 @@ public class UserDaoImpl implements UserDao {
         printWriter.close();
     }
 
-    public List<User> getAllUsers() throws IOException {
+    public List<User> getAllUsers()  {
         List<User> users = new ArrayList<User>();
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-        String readLine = bufferedReader.readLine();
-        while (readLine != null){
-            String [] userData = readLine.split("#");
-            users.add(UserParser.stringToUser(userData));
-            readLine = bufferedReader.readLine();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            String readLine = bufferedReader.readLine();
+            while (readLine != null) {
+                String[] userData = readLine.split("#");
+                users.add(UserParser.stringToUser(userData));
+                readLine = bufferedReader.readLine();
+            }
+            bufferedReader.close();
+        } catch(IOException e){
+            System.out.println("Nie można obsłużyć pliku");
         }
-        bufferedReader.close();
         return users;
     }
 

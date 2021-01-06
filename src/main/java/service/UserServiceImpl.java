@@ -1,36 +1,43 @@
 package service;
 
 import api.UserService;
+import dao.UserDaoImpl;
 import entity.User;
+import entity.validator.UserValidator;
+import exception.UserLoginAlreadyExistException;
+import exception.UserShortLengthLoginException;
+import exception.UserShortLengthPasswordException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    List<User> users;
-    public UserServiceImpl() {
-        this.users = new ArrayList<User>();
+    private static UserServiceImpl instance = null;
+    UserDaoImpl userDao = UserDaoImpl.getInstance();
+    UserValidator userValidator = UserValidator.getInstance();
+    private UserServiceImpl() {
     }
 
-    public UserServiceImpl(List<User> users){
-        this.users = new ArrayList<User>(users);
+    public static UserServiceImpl getInstance(){
+        if(instance == null){
+            instance = new UserServiceImpl();
+        }
+        return instance;
     }
 
     public List<User> getAllUsers() {
-        return users;
+        return userDao.getAllUsers();
     }
 
-    public void addUser(User user) {
-        users.add(user);
+    public void addUser(User user) throws UserLoginAlreadyExistException, UserShortLengthPasswordException, UserShortLengthLoginException, IOException {
+        if(userValidator.isValidate(user)){
+            userDao.saveUser(user);
+        }
     }
 
-    public void removeUserById(Long userId) {
-        for (int i=0; i < users.size(); i++) {
-            User userFromList = users.get(i);
-            if(userFromList.getId() == userId){
-                users.remove(i);
-            }
-            break;
+    public void removeUserById(Long userId) throws IOException {
+        userDao.removeUserById(userId);
     }
     }
-}
+

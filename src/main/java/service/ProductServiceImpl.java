@@ -1,66 +1,58 @@
 package service;
 
 import api.ProductService;
+import dao.ProductDaoImpl;
 import entity.Product;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
-    List<Product> products;
+    private static ProductServiceImpl productServiceImpl = null;
+    ProductDaoImpl productDao = new ProductDaoImpl("products.data", "PRODUCT");
 
-    public ProductServiceImpl(){
-        products = new ArrayList<Product>();
+    private ProductServiceImpl() throws IOException {
     }
 
-    public ProductServiceImpl(List<Product> products){
-        this.products = products;
-    }
-
-    public List<Product> getAllProduct() {
-        return products;
-    }
-
-    public int numberOfProducts() {
-        return products.size();
-    }
-
-    public Product findProduct(String productName) {
-        for(int i = 0; i < products.size(); i++){
-            Product product = products.get(i);
-            if(product.getProductName().equals(productName)){
-                return product;
-            }
+    public static ProductServiceImpl getInstance() throws IOException {
+        if(productServiceImpl == null){
+            productServiceImpl = new ProductServiceImpl();
         }
-        return null;
+        return productServiceImpl;
     }
 
-    public boolean isInStock(String productName) {
-        Product product = findProduct(productName);
-        if(product != null && product.getProductCount() > 0){
+    public List<Product> getAllProduct() throws IOException {
+        return productDao.getAllProducts();
+    }
+
+    public int numberOfProducts() throws IOException {
+        return productDao.getAllProducts().size();
+    }
+
+    public Product findProduct(String productName) throws IOException {
+        return productDao.getProductByProductName(productName);
+    }
+
+    public boolean isInStock(String productName) throws IOException {
+        return productDao.getProductByProductName(productName).getProductCount() > 0;
+    }
+
+    public boolean isExistByName(String productName) throws IOException {
+        Product product = productDao.getProductByProductName(productName);
+        if(product != null){
             return true;
-        } else {
+        } else{
             return false;
         }
     }
 
-    public boolean isExistByName(String productName) {
-        for(int i = 0; i < products.size(); i++){
-            Product product = products.get(i);
-            if(product.getProductName().equals(productName)){
-                return true;
-            }
+    public boolean isExistById(long id) throws IOException {
+        Product product = productDao.getProductById(id);
+        if(product != null){
+            return true;
+        } else{
+            return false;
         }
-        return false;
-    }
-
-    public boolean isExistById(long id) {
-        for(int i = 0; i < products.size(); i++){
-            Product product = products.get(i);
-            if(product.getId() == id){
-                return true;
-            }
-        }
-        return false;
     }
 }
