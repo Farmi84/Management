@@ -7,6 +7,7 @@ public class Product {
     private float weight;
     private String color;
     private int productCount;
+    final String productType = "P";
 
     public Product(long id, String productName, float price, float weight, String color, int productCount) {
         this.id = id;
@@ -51,6 +52,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return id + "#" + productName + "#" + price + "#" + weight + "#" + color + "#" + productCount + "#";
+        return productType + "#" + id + "#" + productName + "#" + price + "#" + weight + "#" + color + "#" + productCount + "#";
     }
 }

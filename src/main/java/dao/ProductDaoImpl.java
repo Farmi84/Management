@@ -10,13 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDaoImpl implements ProductDao {
-    String fileName;
-    String productType;
+    private String fileName = "products.txt";
+    private static ProductDaoImpl instance = null;
 
-    public ProductDaoImpl(String fileName, String productType) throws IOException {
-        this.fileName = fileName;
-        this.productType = productType;
+
+    private ProductDaoImpl() throws IOException {
         FileUtils.createNewFile(fileName);
+    }
+
+    public static ProductDaoImpl getInstance() throws IOException {
+        if(instance == null){
+            instance = new ProductDaoImpl();
+        }
+        return instance;
     }
 
     public void saveProduct(Product product) throws IOException {
@@ -72,9 +78,12 @@ public class ProductDaoImpl implements ProductDao {
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String readLine = bufferedReader.readLine();
         while(readLine != null) {
-            Product product = ProductParser.stringToProduct(readLine, productType);
-            products.add(product);
-            String readline = bufferedReader.readLine();
+            Product product = ProductParser.stringToProduct(readLine);
+            if(product != null) {
+                products.add(product);
+            }
+            readLine = bufferedReader.readLine();
+
         }
         bufferedReader.close();
         return products;

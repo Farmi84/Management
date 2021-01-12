@@ -22,10 +22,10 @@ public class UserValidator {
     }
 
     public boolean isValidate(User user) throws UserShortLengthLoginException, UserShortLengthPasswordException, UserLoginAlreadyExistException {
-        if(isLoginHasFourCharacters(user)){
+        if(!isLoginHasFourCharacters(user)){
             throw new UserShortLengthLoginException();
         }
-        if(isPasswordHasSixCharacters(user)){
+        if(!isPasswordHasSixCharacters(user)){
             throw new UserShortLengthPasswordException();
         }
         if(isUserByLoginExist(user)){
