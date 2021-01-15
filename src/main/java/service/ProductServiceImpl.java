@@ -20,11 +20,16 @@ public class ProductServiceImpl implements ProductService {
     private ProductServiceImpl() throws IOException {
     }
 
-    public static ProductServiceImpl getInstance() throws IOException {
-        if(productServiceImpl == null){
+    public static ProductServiceImpl getInstance()  {
+        try {
+        if(productServiceImpl == null) {
             productServiceImpl = new ProductServiceImpl();
-        }
-        return productServiceImpl;
+            return productServiceImpl;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        return null;
     }
 
     public List<Product> getAllProduct() throws IOException {
@@ -78,12 +83,23 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    public boolean saveProduct(Product product) throws IOException, ProductPriceNoPositiveException, ProductNameEmptyException, ProductCountNegativeException, ProductWeightNoPositiveException {
-        if(ProductValidator.getInstance().isValidate(product)) {
-            productDao.saveProduct(product);
-            return true;
-        } else {
-            return false;
+    public boolean saveProduct(Product product)  {
+        try {
+            if(ProductValidator.getInstance().isValidate(product)) {
+                productDao.saveProduct(product);
+                return true;
+            }
+        } catch (ProductPriceNoPositiveException e) {
+            e.printStackTrace();
+        } catch (ProductNameEmptyException e) {
+            e.printStackTrace();
+        } catch (ProductCountNegativeException e) {
+            e.printStackTrace();
+        } catch (ProductWeightNoPositiveException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return false;
     }
 }

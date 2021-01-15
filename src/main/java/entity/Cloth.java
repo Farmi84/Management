@@ -1,11 +1,15 @@
 package entity;
 
+import constant.Color;
+import constant.Material;
+import constant.ProductSeparators;
+
 public class Cloth extends Product {
     String size;
-    String material;
-    final String productType = "C";
+    Material material;
 
-    public Cloth(long id, String productName, float price, float weight, String color, int productCount, String size, String material) {
+
+    public Cloth(long id, String productName, float price, float weight, Color color, int productCount, String size, Material material) {
         super(id, productName, price, weight, color, productCount);
         this.size = size;
         this.material = material;
@@ -15,16 +19,20 @@ public class Cloth extends Product {
         return size;
     }
 
-    public String getMaterial() {
+    public Material getMaterial() {
         return material;
     }
 
     @Override
     public String toString() {
-        return productType + "#" +
-                getId() + "#" + getProductName() +
-                "#" + getPrice() + "#" + getWeight() +
-                "#" + getColor() + "#" + getProductCount() +
-                "#" + size + "#" + material + "#";
+        return ProductSeparators.CLOTH_ID + ProductSeparators.PRODUCT_SEPARATOR.toString() +
+                getId() + ProductSeparators.PRODUCT_SEPARATOR.toString()
+                + getProductName() + ProductSeparators.PRODUCT_SEPARATOR.toString()
+                + getPrice() + ProductSeparators.PRODUCT_SEPARATOR.toString()
+                + getWeight() + ProductSeparators.PRODUCT_SEPARATOR.toString()
+                + getColor() + ProductSeparators.PRODUCT_SEPARATOR.toString()
+                + getProductCount() + ProductSeparators.PRODUCT_SEPARATOR.toString()
+                + size + ProductSeparators.PRODUCT_SEPARATOR.toString()
+                + material + ProductSeparators.PRODUCT_SEPARATOR.toString();
     }
 }

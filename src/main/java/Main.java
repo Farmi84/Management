@@ -69,23 +69,13 @@ public class Main {
 
                 Product boots = new Boots(id, productName, price, weight, color, productCount, sizeInt, isNaturalSkin);
 
-                try {
+
                     if(ProductServiceImpl.getInstance().saveProduct(boots)){
                         System.out.println("Dodano pomyślnie buty.");
                     } else{
                         System.out.println("Błąd w dodawaniu butów.");
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ProductPriceNoPositiveException e) {
-                    e.printStackTrace();
-                } catch (ProductNameEmptyException e) {
-                    e.printStackTrace();
-                } catch (ProductCountNegativeException e) {
-                    e.printStackTrace();
-                } catch (ProductWeightNoPositiveException e) {
-                    e.printStackTrace();
-                }
+
                 break;
             case 2:
                 System.out.println("Podaj rozmiar: ");
@@ -93,27 +83,17 @@ public class Main {
                 System.out.println("Podaj rodzaj materiału: ");
                 String material = scanner.nextLine();
                 Product cloth = new Cloth(id, productName, price, weight, color, productCount, sizeString, material);
-                try {
+
                     if(ProductServiceImpl.getInstance().saveProduct(cloth)){
                         System.out.println("Dodano pomyślnie ubranie.");
                     } else{
                         System.out.println("Błąd w dodawaniu ubrania.");
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ProductPriceNoPositiveException e) {
-                    e.printStackTrace();
-                } catch (ProductNameEmptyException e) {
-                    e.printStackTrace();
-                } catch (ProductCountNegativeException e) {
-                    e.printStackTrace();
-                } catch (ProductWeightNoPositiveException e) {
-                    e.printStackTrace();
-                }
+
                 break;
             case 3:
                 Product product = new Product(id, productName, price, weight, color, productCount);
-                try {
+
                     if(ProductServiceImpl.getInstance().saveProduct(product)){
                         System.out.println("Dodano pomyślnie produkt");
                     } else{
@@ -121,17 +101,7 @@ public class Main {
                     }
 
                     break;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ProductPriceNoPositiveException e) {
-                    e.printStackTrace();
-                } catch (ProductNameEmptyException e) {
-                    e.printStackTrace();
-                } catch (ProductCountNegativeException e) {
-                    e.printStackTrace();
-                } catch (ProductWeightNoPositiveException e) {
-                    e.printStackTrace();
-                }
+
             default:
                 System.out.println("Zły numer");
         }
