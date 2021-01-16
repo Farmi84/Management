@@ -1,6 +1,6 @@
 package entity.parser;
 
-import constant.SkinType;
+import enums.SkinType;
 
 public class SkinParser {
 
@@ -10,6 +10,6 @@ public class SkinParser {
         } else if(skinTypeString.equals("ARTIFICIAL")){
             return SkinType.ARTIFICIAL;
         }
-        return null;
+        return SkinType.NATURAL;
     }
 }

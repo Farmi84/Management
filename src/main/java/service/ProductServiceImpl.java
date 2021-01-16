@@ -24,8 +24,8 @@ public class ProductServiceImpl implements ProductService {
         try {
         if(productServiceImpl == null) {
             productServiceImpl = new ProductServiceImpl();
-            return productServiceImpl;
                 }
+            return productServiceImpl;
             } catch (IOException e) {
                 e.printStackTrace();
             }

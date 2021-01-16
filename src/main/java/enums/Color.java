@@ -1,4 +1,4 @@
-package constant;
+package enums;
 
 public enum Color {
     BLACK("#000000"),

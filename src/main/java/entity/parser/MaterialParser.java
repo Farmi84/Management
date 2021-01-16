@@ -1,6 +1,6 @@
 package entity.parser;
 
-import constant.Material;
+import enums.Material;
 
 public class MaterialParser {
 
@@ -16,6 +16,6 @@ public class MaterialParser {
         } else if(materialString.equals("POLYESTERS")){
             return Material.POLYESTERS;
         }
-        return null;
+        return Material.COTTON;
     }
 }

@@ -1,7 +1,13 @@
+import enums.Color;
+import enums.Material;
+import enums.SkinType;
 import entity.Boots;
 import entity.Cloth;
 import entity.Product;
 import entity.User;
+import entity.parser.ColorParser;
+import entity.parser.MaterialParser;
+import entity.parser.SkinParser;
 import exception.*;
 import facade.UserRegisterLoginFacadeImpl;
 import service.ProductServiceImpl;
@@ -48,8 +54,12 @@ public class Main {
         float price = Float.parseFloat(scanner.nextLine());
         System.out.println("Podaj masę: ");
         float weight = Float.parseFloat(scanner.nextLine());
-        System.out.println("Podaj kolor: ");
-        String color = scanner.nextLine();
+        System.out.print("Podaj kolor, dostępne kolory: ");
+        for(Color c: Color.values()){
+            System.out.print(c.name() + " ");
+        }
+        String colorString = scanner.nextLine();
+        Color color = ColorParser.parseColor(colorString);
         System.out.println("Podaj ilość: ");
         int productCount = Integer.parseInt(scanner.nextLine());
 
@@ -58,16 +68,15 @@ public class Main {
             case 1:
                 System.out.println("Podaj rozmiar: ");
                 int sizeInt = Integer.parseInt(scanner.nextLine());
-                System.out.println("Czy buty są skórzane? (Y/N)");
-                String isNaturalSkinString = scanner.nextLine();
-                boolean isNaturalSkin = false; //sprawdzić
-                if(isNaturalSkinString.equals("Y")){
-                     isNaturalSkin = true;
-                } else if(isNaturalSkinString.equals("N")) {
-                    isNaturalSkin = false;
+                System.out.print("Podaj rodzaj skóry (dostępne: ");
+                for(SkinType s : SkinType.values()){
+                    System.out.print(s.name() + "; ");
                 }
+                System.out.print(")\n");
+                String skinTypeString = scanner.nextLine();
+                SkinType skinType = SkinParser.parseSkinType(skinTypeString);
 
-                Product boots = new Boots(id, productName, price, weight, color, productCount, sizeInt, isNaturalSkin);
+                Product boots = new Boots(id, productName, price, weight, color, productCount, sizeInt, skinType);
 
 
                     if(ProductServiceImpl.getInstance().saveProduct(boots)){
@@ -80,8 +89,13 @@ public class Main {
             case 2:
                 System.out.println("Podaj rozmiar: ");
                 String sizeString = scanner.nextLine();
-                System.out.println("Podaj rodzaj materiału: ");
-                String material = scanner.nextLine();
+                System.out.println("Podaj rodzaj materiału (dostępne materiały: ");
+                for(Material m : Material.values()){
+                    System.out.print(m.name() + "; ");
+                }
+                System.out.print(")\n");
+                String materialString = scanner.nextLine();
+                Material material = MaterialParser.parseMaterial(materialString);
                 Product cloth = new Cloth(id, productName, price, weight, color, productCount, sizeString, material);
 
                     if(ProductServiceImpl.getInstance().saveProduct(cloth)){

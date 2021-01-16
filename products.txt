@@ -1,4 +1,7 @@
-C#3#fsdf#6.0#3.0#dgdf#7#m#gdfg#
-C#3#dasd#3.0#65.0#sdfsd#32#56#false#
-C#4#fsdf#3.0#2.0#fsd#45#m#sdf#
-P#4#fsd#32.0#56.0#sfd#3#
+P#1#kurtka#9.0#3.0#RED#6#
+B#3#buty#65.0#45.0#GREEN#9#56#NATURAL#
+C#7#gd#5.0#4.0#RED#9#M#WOOL#
+B#3#dsad#5.0#7.0#RED#9#7#NATURAL#
+B#4#fsd#6.0#8.0#RED#5#9#NATURAL#
+P#4#dasd#5.0#7.0#YELLOW#5#
+B#3#tenisówki#35.0#70.0#BLUE#4#56#ARTIFICIAL#

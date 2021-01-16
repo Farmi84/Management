@@ -1,6 +1,6 @@
 package entity.parser;
 
-import constant.Color;
+import enums.Color;
 
 public class ColorParser {
 
@@ -18,6 +18,6 @@ public class ColorParser {
         }else if(colorString.equals("YELLOW")){
             return Color.YELLOW;
         }
-        return null;
+        return Color.BLACK;
     }
 }

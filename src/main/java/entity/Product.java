@@ -1,7 +1,7 @@
 package entity;
 
-import constant.Color;
-import constant.ProductSeparators;
+import enums.Color;
+import enums.ProductSeparators;
 
 public class Product {
     private long id;

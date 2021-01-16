@@ -1,8 +1,8 @@
 package entity.parser;
 
-import constant.Color;
-import constant.Material;
-import constant.SkinType;
+import enums.Color;
+import enums.Material;
+import enums.SkinType;
 import entity.Boots;
 import entity.Cloth;
 import entity.Product;

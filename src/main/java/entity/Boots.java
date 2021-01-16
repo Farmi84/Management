@@ -1,8 +1,8 @@
 package entity;
 
-import constant.Color;
-import constant.ProductSeparators;
-import constant.SkinType;
+import enums.Color;
+import enums.ProductSeparators;
+import enums.SkinType;
 
 public class Boots extends Product {
     private int size;

@@ -1,8 +1,8 @@
 package entity;
 
-import constant.Color;
-import constant.Material;
-import constant.ProductSeparators;
+import enums.Color;
+import enums.Material;
+import enums.ProductSeparators;
 
 public class Cloth extends Product {
     String size;

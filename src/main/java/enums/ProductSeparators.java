@@ -1,4 +1,4 @@
-package constant;
+package enums;
 
 public enum ProductSeparators {
     PRODUCT_SEPARATOR("#"),
@@ -10,5 +10,11 @@ public enum ProductSeparators {
 
     ProductSeparators(String separator) {
         this.separator = separator;
+    }
+
+
+    @Override
+    public String toString() {
+        return separator;
     }
 }
