@@ -1,12 +1,17 @@
 package entity;
 
 public class User {
-    private long id;
+    private long id = 0;
     private String login;
     private String password;
 
     public User(long id, String login, String password) {
         this.id = id;
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(String login, String password) {
         this.login = login;
         this.password = password;
     }

@@ -155,11 +155,8 @@ public class Main {
                     String newLogin = scanner.nextLine();
                     System.out.println("Podaj hasło");
                     String newPassword = scanner.nextLine();
-                    System.out.println("id");
-                    long id = scanner.nextInt();
-                    String empty = scanner.nextLine();
                     try {
-                        if(UserRegisterLoginFacadeImpl.getInstance().registerUser(new User(id, newLogin, newPassword))){
+                        if(UserRegisterLoginFacadeImpl.getInstance().registerUser(new User(newLogin, newPassword))){
                             System.out.println("Rejestracja przebiegła pomyślnie");
                         } else {
                             System.out.println("Błąd rejestracji");
