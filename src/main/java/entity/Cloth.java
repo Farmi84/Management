@@ -4,12 +4,14 @@ import enums.Color;
 import enums.Material;
 import enums.ProductSeparators;
 
+import java.math.BigDecimal;
+
 public class Cloth extends Product {
     String size;
     Material material;
 
 
-    public Cloth(long id, String productName, float price, float weight, Color color, int productCount, String size, Material material) {
+    public Cloth(long id, String productName, BigDecimal price, BigDecimal weight, Color color, int productCount, String size, Material material) {
         super(id, productName, price, weight, color, productCount);
         this.size = size;
         this.material = material;

@@ -23,8 +23,18 @@ public class UserRegisterLoginFacadeImpl implements UserRegisterLoginFacade {
         return instance;
     }
 
-    public boolean registerUser(User user) throws UserLoginAlreadyExistException, UserShortLengthPasswordException, UserShortLengthLoginException, IOException {
-        return userService.addUser(user);
+    public boolean registerUser(User user) {
+        try {
+            return userService.addUser(user);
+        } catch (UserLoginAlreadyExistException e) {
+            e.printStackTrace();
+        } catch (UserShortLengthPasswordException e) {
+            e.printStackTrace();
+        } catch (UserShortLengthLoginException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } return false;
     }
 
     public boolean loginUser(String user, String password) {

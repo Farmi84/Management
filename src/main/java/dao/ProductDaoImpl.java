@@ -3,110 +3,159 @@ package dao;
 import api.ProductDao;
 import entity.Product;
 import entity.parser.ProductParser;
-import utils.FileUtils;
+import enums.Color;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDaoImpl implements ProductDao {
+    private Connection connection;
+    private String databaseName = "management";
+    private String user = "root";
+    private String password = "admin";
+    private String tableName = "products";
     private String fileName = "products.txt";
     private static ProductDaoImpl instance = null;
 
+    private void init() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost/" + databaseName + "?useSSL=false", user, password);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
 
     private ProductDaoImpl() throws IOException {
-        FileUtils.createNewFile(fileName);
+        init();
     }
 
     public static ProductDaoImpl getInstance() throws IOException {
-        if(instance == null){
+        if (instance == null) {
             instance = new ProductDaoImpl();
         }
         return instance;
     }
 
-    public void saveProduct(Product product) throws IOException {
-
-        List<Product> allProducts = getAllProducts();
-        allProducts.add(product);
-        saveProducts(allProducts);
-    }
-
-    public void saveProducts(List<Product> products)  {
-        PrintWriter printWriter = null;
+    public void saveProduct(Product product) {
+        PreparedStatement statement;
         try {
-            FileUtils.clearFile(fileName);
-            printWriter = new PrintWriter(new FileOutputStream(fileName, true));
-            for (Product product : products) {
-                printWriter.write(product.toString() + "\n");
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            printWriter.close();
+            String query = "insert into " + tableName +
+                    " (productname, price, weight, color, productcount) " +
+                    "values (?, ?, ?, ?, ?)";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, product.getProductName());
+            statement.setBigDecimal(2, product.getPrice());
+            statement.setBigDecimal(3, product.getWeight());
+            statement.setString(4, product.getColor().name());
+            statement.setInt(5, product.getProductCount());
+            statement.execute();
+            statement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
 
     }
 
-    public void removeProductById(long productId) throws IOException {
-        List<Product> allProducts = getAllProducts();
-        for(int i = 0; i < allProducts.size(); i++){
-            Product product = allProducts.get(i);
-            if(product.getId() == productId){
-                allProducts.remove(i);
-                break;
-            }
+
+    public void removeProductById(long productId) {
+        PreparedStatement statement;
+        try {
+            String query = "delete * from " + databaseName + " where ID='" + productId + "'";
+            statement = connection.prepareStatement(query);
+            statement.execute();
+            statement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        saveProducts(allProducts);
     }
 
     public void removeProductByName(String productName) throws IOException {
-        List<Product> allProducts = getAllProducts();
-        for(int i = 0; i < allProducts.size(); i++){
-            Product product = allProducts.get(i);
-            if(product.getProductName().equals(productName)){
-                allProducts.remove(i);
-                return;
-            }
+        PreparedStatement statement;
+        try {
+            String query = "delete * from " + databaseName + " where productname='" + productName + "'";
+            statement = connection.prepareStatement(query);
+            statement.execute();
+            statement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        saveProducts(allProducts);
     }
 
-    public List<Product> getAllProducts() throws IOException {
+    public List<Product> getAllProducts(){
         List<Product> products = new ArrayList<Product>();
-        FileReader fileReader = new FileReader(fileName);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String readLine = bufferedReader.readLine();
-        while(readLine != null) {
-            Product product = ProductParser.stringToProduct(readLine);
-            if(product != null) {
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            String query = "select * from " + tableName;
+            ResultSet resultSet = statement.executeQuery(query);
+            while(resultSet.next()){
+                long id = resultSet.getInt("ID");
+                String productName = resultSet.getString("productname");
+                BigDecimal price = new BigDecimal(resultSet.getString("price"));
+                BigDecimal weight = new BigDecimal(resultSet.getString("weight"));
+                Color color =  Color.valueOf(resultSet.getString("color"));
+                int productCount = resultSet.getInt("productcount");
+                Product product = new Product(id, productName, price, weight, color, productCount);
                 products.add(product);
             }
-            readLine = bufferedReader.readLine();
-
+            statement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        bufferedReader.close();
         return products;
 
     }
 
-    public Product getProductById(long productId) throws IOException {
-        List<Product> allProducts = getAllProducts();
-        for(int i = 0; i < allProducts.size(); i++){
-            Product product = allProducts.get(i);
-            if(product.getId() == productId){
+    public Product getProductById(long productId) {
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            String query = "select * from " + tableName + " where ID='" + productId + "'";
+            ResultSet resultSet = statement.executeQuery(query);
+            while(resultSet.next()){
+                long id = resultSet.getInt("ID");
+                String productName = resultSet.getString("productname");
+                BigDecimal price = new BigDecimal(resultSet.getString("price"));
+                BigDecimal weight = new BigDecimal(resultSet.getString("weight"));
+                Color color =  Color.valueOf(resultSet.getString("color"));
+                int productCount = resultSet.getInt("productcount");
+                Product product = new Product(id, productName, price, weight, color, productCount);
                 return product;
             }
-        } return null;
+            statement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
-    public Product getProductByProductName(String productName) throws IOException {
-        List<Product> allProducts = getAllProducts();
-        for(int i = 0; i < allProducts.size(); i++){
-            Product product = allProducts.get(i);
-            if(product.getProductName().equals(productName)){
+    public Product getProductByProductName(String productName){
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            String query = "select * from " + tableName + " where productname='" + productName + "'";
+            ResultSet resultSet = statement.executeQuery(query);
+            while(resultSet.next()){
+                long id = resultSet.getInt("ID");
+                String name = resultSet.getString("productname");
+                BigDecimal price = new BigDecimal(resultSet.getString("price"));
+                BigDecimal weight = new BigDecimal(resultSet.getString("weight"));
+                Color color =  Color.valueOf(resultSet.getString("color"));
+                int productCount = resultSet.getInt("productcount");
+                Product product = new Product(id, name, price, weight, color, productCount);
                 return product;
             }
-        } return null;
+            statement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 }

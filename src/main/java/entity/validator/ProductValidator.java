@@ -6,6 +6,8 @@ import exception.ProductNameEmptyException;
 import exception.ProductPriceNoPositiveException;
 import exception.ProductWeightNoPositiveException;
 
+import java.math.BigDecimal;
+
 public class ProductValidator {
     private static ProductValidator instance = null;
 
@@ -36,7 +38,10 @@ public class ProductValidator {
     }
 
     private boolean isPricePositive(Product product){
-        return product.getPrice() > 0;
+        if((product.getPrice().compareTo(BigDecimal.ZERO))==1){
+            return true;
+        }
+        return false;
     }
 
     private boolean isNameNotEmpty(Product product){
@@ -48,6 +53,9 @@ public class ProductValidator {
     }
 
     private boolean isWeightPositive(Product product){
-        return product.getWeight() > 0;
+        if((product.getWeight().compareTo(BigDecimal.ZERO)) == 1){
+            return true;
+        }
+        return false;
     }
 }

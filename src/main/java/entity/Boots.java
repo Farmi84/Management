@@ -4,11 +4,13 @@ import enums.Color;
 import enums.ProductSeparators;
 import enums.SkinType;
 
+import java.math.BigDecimal;
+
 public class Boots extends Product {
     private int size;
     private SkinType skinType;
 
-    public Boots(long id, String productName, float price, float weight, Color color, int productCount, int size, SkinType skinType) {
+    public Boots(long id, String productName, BigDecimal price, BigDecimal weight, Color color, int productCount, int size, SkinType skinType) {
         super(id, productName, price, weight, color, productCount);
         this.size = size;
         this.skinType = skinType;
@@ -16,6 +18,10 @@ public class Boots extends Product {
 
     public int getSize() {
         return size;
+    }
+
+    public SkinType getSkinType() {
+        return skinType;
     }
 
     public SkinType isNaturalSkin() {

@@ -7,6 +7,8 @@ import entity.Boots;
 import entity.Cloth;
 import entity.Product;
 
+import java.math.BigDecimal;
+
 public class ProductParser {
 
     public static Product stringToProduct(String readLine) {
@@ -14,8 +16,8 @@ public class ProductParser {
         String[] values = readLine.split("#");
         long id = Long.parseLong(values[1]);
         String productName = values[2];
-        float price = Float.parseFloat(values[3]);
-        float weight = Float.parseFloat(values[4]);
+        BigDecimal price = new BigDecimal(values[3]);
+        BigDecimal weight = new BigDecimal(values[4]);
         Color color = ColorParser.parseColor(values[5]);
         int productCount = Integer.parseInt(values[6]);
 

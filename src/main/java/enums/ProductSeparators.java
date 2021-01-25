@@ -8,6 +8,7 @@ public enum ProductSeparators {
 
     private String separator;
 
+
     ProductSeparators(String separator) {
         this.separator = separator;
     }

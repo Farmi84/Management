@@ -10,9 +10,12 @@ import entity.parser.MaterialParser;
 import entity.parser.SkinParser;
 import exception.*;
 import facade.UserRegisterLoginFacadeImpl;
+import service.BootsServiceImpl;
+import service.ClothServiceImpl;
 import service.ProductServiceImpl;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
@@ -51,9 +54,9 @@ public class Main {
         System.out.println("Podaj nazwę produktu: ");
         String productName = scanner.nextLine();
         System.out.println("Podaj cenę: ");
-        float price = Float.parseFloat(scanner.nextLine());
+        BigDecimal price = new BigDecimal(scanner.nextLine());
         System.out.println("Podaj masę: ");
-        float weight = Float.parseFloat(scanner.nextLine());
+        BigDecimal weight = new BigDecimal(scanner.nextLine());
         System.out.print("Podaj kolor, dostępne kolory: ");
         for(Color c: Color.values()){
             System.out.print(c.name() + " ");
@@ -76,14 +79,18 @@ public class Main {
                 String skinTypeString = scanner.nextLine();
                 SkinType skinType = SkinParser.parseSkinType(skinTypeString);
 
-                Product boots = new Boots(id, productName, price, weight, color, productCount, sizeInt, skinType);
+                Boots boots = new Boots(id, productName, price, weight, color, productCount, sizeInt, skinType);
 
 
-                    if(ProductServiceImpl.getInstance().saveProduct(boots)){
+                try {
+                    if(BootsServiceImpl.getInstance().saveProduct(boots)){
                         System.out.println("Dodano pomyślnie buty.");
                     } else{
                         System.out.println("Błąd w dodawaniu butów.");
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 break;
             case 2:
@@ -96,13 +103,17 @@ public class Main {
                 System.out.print(")\n");
                 String materialString = scanner.nextLine();
                 Material material = MaterialParser.parseMaterial(materialString);
-                Product cloth = new Cloth(id, productName, price, weight, color, productCount, sizeString, material);
+                Cloth cloth = new Cloth(id, productName, price, weight, color, productCount, sizeString, material);
 
-                    if(ProductServiceImpl.getInstance().saveProduct(cloth)){
+                try {
+                    if(ClothServiceImpl.getInstance().saveProduct(cloth)){
                         System.out.println("Dodano pomyślnie ubranie.");
                     } else{
                         System.out.println("Błąd w dodawaniu ubrania.");
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 break;
             case 3:
@@ -155,22 +166,14 @@ public class Main {
                     String newLogin = scanner.nextLine();
                     System.out.println("Podaj hasło");
                     String newPassword = scanner.nextLine();
-                    try {
+
                         if(UserRegisterLoginFacadeImpl.getInstance().registerUser(new User(newLogin, newPassword))){
                             System.out.println("Rejestracja przebiegła pomyślnie");
                         } else {
                             System.out.println("Błąd rejestracji");
                         }
                         break;
-                    } catch (UserLoginAlreadyExistException e) {
-                        e.printStackTrace();
-                    } catch (UserShortLengthPasswordException e) {
-                        e.printStackTrace();
-                    } catch (UserShortLengthLoginException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
                 case 0:
                     mainMenu = false;
                     break;

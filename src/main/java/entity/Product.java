@@ -3,15 +3,17 @@ package entity;
 import enums.Color;
 import enums.ProductSeparators;
 
+import java.math.BigDecimal;
+
 public class Product {
     private long id;
     private String productName;
-    private float price;
-    private float weight;
+    private BigDecimal price;
+    private BigDecimal weight;
     private Color color;
     private int productCount;
 
-    public Product(long id, String productName, float price, float weight, Color color, int productCount) {
+    public Product(long id, String productName, BigDecimal price, BigDecimal weight, Color color, int productCount) {
         this.id = id;
         this.productName = productName;
         this.price = price;
@@ -28,11 +30,11 @@ public class Product {
         return productName;
     }
 
-    public float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public float getWeight() {
+    public BigDecimal getWeight() {
         return weight;
     }
 
@@ -44,7 +46,7 @@ public class Product {
         return productCount;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

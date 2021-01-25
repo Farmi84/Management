@@ -21,71 +21,64 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public static ProductServiceImpl getInstance()  {
-        try {
-        if(productServiceImpl == null) {
-            productServiceImpl = new ProductServiceImpl();
-                }
-            return productServiceImpl;
+
+        if (productServiceImpl == null) {
+            try {
+                productServiceImpl = new ProductServiceImpl();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        return null;
+        }
+        return productServiceImpl;
+
     }
 
-    public List<Product> getAllProduct() throws IOException {
+    public List<Product> getAllProduct()  {
         return productDao.getAllProducts();
     }
 
-    public Integer numberOfProducts() throws IOException {
+    public Integer numberOfProducts()  {
         return productDao.getAllProducts().size();
     }
 
-    public Product findProduct(String productName) throws IOException {
+    public Product findProduct(String productName){
         return productDao.getProductByProductName(productName);
     }
 
-    public boolean isInStock(String productName) {
-        try {
-            if (productDao.getProductByProductName(productName).getProductCount() > 0) {
-                return true;
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
+    public boolean isInStock(String productName){
 
-    public boolean isExistByName(String productName) {
-        Product product = null;
-        try {
-            product = productDao.getProductByProductName(productName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(product != null){
+        if (productDao.getProductByProductName(productName).getProductCount() > 0) {
             return true;
-        } else{
+        } else {
             return false;
         }
     }
 
-    public boolean isExistById(long id) {
+    public boolean isExistByName(String productName){
         Product product = null;
-        try {
-            product = productDao.getProductById(id);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(product != null){
+        product = productDao.getProductByProductName(productName);
+
+        if (product != null) {
             return true;
-        } else{
+        } else {
             return false;
         }
     }
 
-    public boolean saveProduct(Product product)  {
+    public boolean isExistById(long id){
+        Product product = null;
+        product = productDao.getProductById(id);
+
+        if (product != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean saveProduct(Product product) {
         try {
-            if(ProductValidator.getInstance().isValidate(product)) {
+            if (ProductValidator.getInstance().isValidate(product)) {
                 productDao.saveProduct(product);
                 return true;
             }
@@ -96,8 +89,6 @@ public class ProductServiceImpl implements ProductService {
         } catch (ProductCountNegativeException e) {
             e.printStackTrace();
         } catch (ProductWeightNoPositiveException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
